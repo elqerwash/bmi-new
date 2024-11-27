@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Body Mass Index Calculator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            font-size: 16px;
+            direction: rtl;
+        }
+        #calculateBtn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+        #calculateBtn:hover {
+            background-color: #2980b9;
+        }
+        #result {
+            margin-top: 20px;
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Body Mass Index Calculator</h1>
+        
+        <div class="input-group">
+            <label for="weight">الوزن (كجم)</label>
+            <input type="number" id="weight" placeholder="أدخل وزنك" required>
+        </div>
+        
+        <div class="input-group">
+            <label for="height">الطول (سم)</label>
+            <input type="number" id="height" placeholder="أدخل طولك" required>
+        </div>
+        
+        <button id="calculateBtn">احسب مؤشر كتلة الجسم</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('calculateBtn').addEventListener('click', calculateBMI);
+
+        function calculateBMI() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value) / 100; // تحويل السم إلى متر
+            const resultDiv = document.getElementById('result');
+
+            if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
+                resultDiv.innerHTML = `
+                    <p style="color: red;">❌ يرجى إدخال قيم صحيحة للوزن والطول</p>
+                `;
+                return;
+            }
+
+            const bmi = weight / (height * height);
+            const roundedBMI = bmi.toFixed(2);
+
+            let interpretation = '';
+            let color = '';
+            let healthAdvice = '';
+
+            if (bmi < 18.5) {
+                interpretation = 'نقص الوزن';
+                color = '#3498db';
+                healthAdvice = `
+### نصائح صحية:
+- زيادة تناول الوجبات الغذائية المتوازنة
+- التركيز على الأطعمة الغنية بالبروتينات والكربوهيدرات الصحية
+- استشارة أخصائي التغذية للحصول على خطة غذائية مناسبة
+                `;
+            } else if (bmi >= 18.5 && bmi < 25) {
+                interpretation = 'وزن صحي';
+                color = '#2ecc71';
+                healthAdvice = `
+### نصائح للحفاظ على الوزن:
+- الاستمرار في اتباع نظام غذائي متوازن
+- ممارسة التمارين الرياضية بانتظام
+- الحفاظ على نمط حياة نشط
+                `;
+            } else if (bmi >= 25 && bmi < 30) {
+                interpretation = 'زيادة في الوزن';
+                color = '#f39c12';
+                healthAdvice = `
+### نصائح لإنقاص الوزن:
+- تقليل السعرات الحرارية
+- زيادة النشاط البدني
+- تجنب الأطعمة المصنعة والوجبات السريعة
+- استشارة أخصائي التغذية
+                `;
+            } else {
+                interpretation = 'سمنة';
+                color = '#e74c3c';
+                healthAdvice = `
+### نصائح للتعامل مع السمنة:
+- استشارة الطبيب أو أخصائي التغذية
+- وضع خطة شاملة لإنقاص الوزن
+- العمل على تغيير نمط الحياة بشكل تدريجي
+- زيادة النشاط البدني
+                `;
+            }
+
+            resultDiv.innerHTML = `
+                <div style="background-color: ${color}; color: white; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+                    <strong>مؤشر كتلة الجسم: ${roundedBMI}</strong>
+                </div>
+                <div style="text-align: right;">
+                    <h3>التفسير: ${interpretation}</h3>
+                    ${healthAdvice}
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
